@@ -7,10 +7,16 @@
 
   <!-- iOS niceties -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+ <!-- Tailwind (pinned) -->
+<script src="https://cdn.tailwindcss.com/3.4.13"></script>
+
+<!-- React 18 UMD (pinned) -->
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+
+<!-- Babel Standalone (pinned) -->
+<script src="https://unpkg.com/@babel/standalone@7.25.7/babel.min.js"></script>
+
 
   <style>
     html { -webkit-text-size-adjust: 100%; }
@@ -24,9 +30,18 @@
   </style>
 </head>
 <body class="bg-gray-100">
-  <div id="root"></div>
+<div id="errbox" style="display:none;position:fixed;left:0;right:0;top:0;background:#7f1d1d;color:#fff;padding:10px 14px;z-index:9999;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif"></div>
 
-  <script type="text/babel" data-presets="env,react">
+<script>
+  function __showErr(msg){
+    var box=document.getElementById('errbox');
+    box.textContent = 'Runtime error: ' + msg;
+    box.style.display = 'block';
+  }
+  window.addEventListener('error', e => __showErr(e && e.message || 'Unknown error'));
+  window.addEventListener('unhandledrejection', e => __showErr((e && e.reason && (e.reason.message||e.reason)) || 'Unhandled rejection'));
+</script>
+
     const fmt = n => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format((+n)||0);
     const num = s => { const x=parseFloat(String(s??'').replace(/[,$]/g,'')); return Number.isFinite(x)?x:0; };
     const onlyNum = s => (s||'').replace(/[^0-9.]/g,'');
